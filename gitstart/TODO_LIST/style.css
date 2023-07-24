@@ -1,0 +1,21 @@
+/* ... (Existing CSS styles) ... */
+
+/* Set cursor style to pointer for tick and delete icons */
+.tick,
+.delete {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+/* Align tick and delete icons to be vertically centered */
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.task-info {
+    flex: 1;
+}

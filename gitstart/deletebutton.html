@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Booking</title>
+</head>
+<body>
+  <h1>Appointment Booking</h1>
+
+  <form id="appointment-form">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name">
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email">
+    </div>
+    <div>
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone">
+    </div>
+    <button type="submit">Book Appointment</button>
+  </form>
+
+  <h2>Appointments</h2>
+  <ul id="appointments"></ul>
+
+  <script>
+    const appointmentForm = document.getElementById('appointment-form');
+    const appointmentsList = document.getElementById('appointments');
+
+    appointmentForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nameInput = document.getElementById('name');
+      const emailInput = document.getElementById('email');
+      const phoneInput = document.getElementById('phone');
+
+      const name = nameInput.value;
+      const email = emailInput.value;
+      const phone = phoneInput.value;
+
+      const appointment = {
+        name: name,
+        email: email,
+        phone: phone
+      };
+
+      const existingAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+      existingAppointments.push(appointment);
+      localStorage.setItem('appointments', JSON.stringify(existingAppointments));
+
+      nameInput.value = '';
+      emailInput.value = '';
+      phoneInput.value = '';
+
+      displayAppointments();
+    });
+
+    function displayAppointments() {
+      appointmentsList.innerHTML = '';
+
+      const storedAppointments = JSON.parse(localStorage.getItem('appointments'));
+
+      if (storedAppointments) {
+        storedAppointments.forEach(function(appointment, index) {
+          const listItem = document.createElement('li');
+          listItem.textContent = `Name: ${appointment.name}, Email: ${appointment.email}, Phone: ${appointment.phone}`;
+
+          const deleteButton = document.createElement('button');
+          deleteButton.textContent = 'Delete';
+          deleteButton.addEventListener('click', function() {
+            deleteAppointment(index);
+          });
+
+          listItem.appendChild(deleteButton);
+          appointmentsList.appendChild(listItem);
+        });
+      }
+    }
+
+    function deleteAppointment(index) {
+      const storedAppointments = JSON.parse(localStorage.getItem('appointments'));
+
+      if (storedAppointments && index >= 0 && index < storedAppointments.length) {
+        storedAppointments.splice(index, 1);
+        localStorage.setItem('appointments', JSON.stringify(storedAppointments));
+        displayAppointments();
+      }
+    }
+
+    displayAppointments();
+  </script>
+</body>
+</html>
